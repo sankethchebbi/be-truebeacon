@@ -62,6 +62,17 @@ const placeOrderSchema = {
 };
 
 //const baseURL = ""
+app.get('/data/historical', async (req, res) => {
+  try {
+    const filePath = path.join(__dirname, 'output.json');
+    const data = await fs.readFile(filePath, 'utf-8');
+    res.type('application/json').send(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 // GET endpoint to retrieve user data
 app.get('/data/profile', async (req, res) => {
   try {
