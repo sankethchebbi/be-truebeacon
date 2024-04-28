@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>WebSocket Client</title>
+	</head>
+
+	<body>
+		<h1>Random Stock Price Generator</h1>
+		<div id="stockPrices"></div>
+
+		<script>
+			const ws = new WebSocket('ws://localhost:8080');
+
+			ws.onopen = () => {
+				console.log('Connected to WebSocket server');
+			};
+
+			ws.onmessage = (event) => {
+				const stockData = JSON.parse(event.data);
+				console.log('Received data:', stockData);
+				const stockPricesDiv = document.getElementById('stockPrices');
+
+				// Clear previous stock prices
+				stockPricesDiv.innerHTML = '';
+
+				// Loop through each stock data and create HTML elements
+				stockData.forEach((stock) => {
+					const stockDiv = document.createElement('div');
+					stockDiv.innerText = `${stock.symbol}: ${stock.price}`;
+					stockPricesDiv.appendChild(stockDiv);
+				});
+			};
+
+			ws.onclose = () => {
+				console.log('Disconnected from WebSocket server');
+			};
+		</script>
+	</body>
+
+</html>
